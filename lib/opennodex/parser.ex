@@ -12,4 +12,9 @@ defmodule OpenNodex.Parser do
     %{data: data} = Jason.decode!(json, keys: :atoms!)
     data
   end
+
+  def parse_error(json) do
+    %{"message" => message} = Jason.decode!(json)
+    message
+  end
 end

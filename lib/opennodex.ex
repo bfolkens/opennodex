@@ -31,8 +31,9 @@ defmodule OpenNodex do
           |> Parser.parse_atomized_keys()
           |> Charge.from()
         {:ok, charge}
-      response ->
-        response
+      {:error, data} ->
+        message = Parser.parse_error(data)
+        {:error, message}
     end
   end
 
@@ -53,8 +54,9 @@ defmodule OpenNodex do
           |> Parser.parse_atomized_keys()
           |> Enum.map(&Charge.from/1)
         {:ok, charges}
-      response ->
-        response
+      {:error, data} ->
+        message = Parser.parse_error(data)
+        {:error, message}
     end
   end
 
@@ -75,8 +77,9 @@ defmodule OpenNodex do
           |> Parser.parse_atomized_keys()
           |> Charge.from()
         {:ok, charge}
-      response ->
-        response
+      {:error, data} ->
+        message = Parser.parse_error(data)
+        {:error, message}
     end
   end
 
@@ -92,12 +95,11 @@ defmodule OpenNodex do
   def get_currencies do
     case get("currencies") do
       {:ok, data} ->
-        currencies =
-          data
-          |> Parser.parse_string_keys()
+        currencies = Parser.parse_string_keys(data)
         {:ok, currencies}
-      response ->
-        response
+      {:error, data} ->
+        message = Parser.parse_error(data)
+        {:error, message}
     end
   end
 
@@ -113,12 +115,11 @@ defmodule OpenNodex do
   def get_rates do
     case get("rates") do
       {:ok, data} ->
-        rates =
-          data
-          |> Parser.parse_string_keys()
+        rates = Parser.parse_string_keys(data)
         {:ok, rates}
-      response ->
-        response
+      {:error, data} ->
+        message = Parser.parse_error(data)
+        {:error, message}
     end
   end
 
@@ -130,8 +131,8 @@ defmodule OpenNodex do
     case request().get(endpoint) do
       %HTTPotion.Response{body: body, status_code: 200} ->
         {:ok, body}
-      response ->
-        {:error, response}
+      %HTTPotion.Response{body: body} ->
+        {:error, body}
     end
   end
 
@@ -139,8 +140,8 @@ defmodule OpenNodex do
     case request().post(endpoint, data) do
       %HTTPotion.Response{body: body, status_code: 201} ->
         {:ok, body}
-      response ->
-        {:error, response}
+      %HTTPotion.Response{body: body} ->
+        {:error, body}
     end
   end
 
