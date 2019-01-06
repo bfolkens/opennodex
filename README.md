@@ -27,3 +27,13 @@ In your config.exs, place a line that sets the `api_key` for `:opennodex`:
 ```elixir
 config :opennodex, api_key: "[your api_key here]"
 ```
+
+## Usage
+
+Create a $99 charge, with callback and success URLs:
+
+```elixir
+OpenNodex.create_charge(99, "USD", "https://example.com/callback", "https://example.com/success")
+```
+
+Will return an `{:ok, %Charge{id: ...}}` upon success or `{:error, ...}` on failure.
