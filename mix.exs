@@ -38,14 +38,12 @@ defmodule OpenNodex.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :httpotion],
-      mod: {OpenNodex.Application, []}
+      extra_applications: [:logger, :httpotion]
     ]
   end
 
   defp deps do
     [
-      {:decimal, "~> 1.0"},
       {:jason, "~> 1.1"},
       {:httpotion, "~> 3.1.0"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},

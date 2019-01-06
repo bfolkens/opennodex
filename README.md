@@ -22,3 +22,11 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/opennodex](https://hexdocs.pm/opennodex).
+
+## Configuration
+
+In your config.exs, place a line that sets the `api_key` for `:opennodex`:
+
+```elixir
+config :opennodex, api_key: "[your api_key here]"
+```
