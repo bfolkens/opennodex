@@ -1,7 +1,7 @@
 # OpenNodex
 
 [![Hex version badge](https://img.shields.io/hexpm/v/opennodex.svg)](https://hex.pm/packages/opennodex)
-[![Build status badge](https://img.shields.io/circleci/project/github/bfolkens/opennodex/master.svg)]
+[![Build status badge](https://img.shields.io/circleci/project/github/bfolkens/opennodex/master.svg)](https://circleci.com/gh/bfolkens/opennodex/tree/master)
 [![Code coverage badge](https://img.shields.io/codecov/c/github/bfolkens/opennodex/master.svg)](https://codecov.io/gh/bfolkens/opennodex/branch/master)
 
 A (very) simple interface to opennode.co - more to come if this gets wings.
