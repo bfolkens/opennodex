@@ -8,7 +8,7 @@ defmodule OpenNodex.MixProject do
       app: :opennodex,
       name: "OpenNodex",
       description: "Opennode.co Elixir Client",
-      version: "0.1.1",
+      version: "0.2.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
