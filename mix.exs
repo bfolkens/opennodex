@@ -26,7 +26,8 @@ defmodule OpenNodex.MixProject do
     [
       {:decimal, "~> 1.0"},
       {:jason, "~> 1.1"},
-      {:httpotion, "~> 3.1.0"}
+      {:httpotion, "~> 3.1.0"},
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
     ]
   end
 end
