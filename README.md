@@ -1,5 +1,7 @@
 # OpenNodex
 
+[![CircleCI](https://circleci.com/gh/bfolkens/opennodex.svg?style=svg)](https://circleci.com/gh/bfolkens/opennodex)
+
 A (very) simple interface to opennode.co - more to come if this gets wings.
 
 ## Installation
