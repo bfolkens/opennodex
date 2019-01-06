@@ -1,4 +1,8 @@
 defmodule OpenNodex.MockRequest do
+  @moduledoc """
+  Documentation for OpenNodex.MockRequest.
+  """
+
   def get("rates") do
     body = ~s({"data":{"BTCUSD":{"USD":3845.30},"BTCEUR":{"EUR":2890.95}}})
     %HTTPotion.Response{status_code: 200, body: body}

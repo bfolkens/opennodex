@@ -1,9 +1,13 @@
 defmodule OpenNodex.MixProject do
   use Mix.Project
 
+  @github_url "https://github.com/bfolkens/opennodex"
+
   def project do
     [
       app: :opennodex,
+      name: "OpenNodex",
+      description: "Opennode.co Elixir Client",
       version: "0.1.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
@@ -11,6 +15,23 @@ defmodule OpenNodex.MixProject do
       docs: [
         main: "readme",
         extras: ["README.md"]
+      ],
+      files: ~w(mix.exs lib LICENSE README.md),
+      package: [
+        maintainers: ["Brad Folkens"],
+        licenses: ["MIT"],
+        links: %{
+          "GitHub" => @github_url,
+        }
+      ],
+      source_url: @github_url,
+      homepage_url: @github_url,
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
       ]
     ]
   end
@@ -27,7 +48,10 @@ defmodule OpenNodex.MixProject do
       {:decimal, "~> 1.0"},
       {:jason, "~> 1.1"},
       {:httpotion, "~> 3.1.0"},
-      {:ex_doc, "~> 0.19", only: :dev, runtime: false}
+      {:ex_doc, "~> 0.19", only: :dev, runtime: false},
+      {:credo, "~> 1.0", only: [:dev, :test]},
+      {:excoveralls, "~> 0.10", only: :test},
+      {:junit_formatter, "~> 2.1", only: :test} # formatting for CircleCI
     ]
   end
 end

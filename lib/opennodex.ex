@@ -24,7 +24,8 @@ defmodule OpenNodex do
       success_url: success_url
     })
 
-    post("charges", request_body)
+    "charges"
+    |> post(request_body)
     |> Parser.parse_atomized_keys()
     |> Charge.from()
   end
@@ -38,8 +39,9 @@ defmodule OpenNodex do
       [%OpenNodex.Charge{callback_url: nil, name: nil, notif_email: nil, amount: 2573293, auto_settle: false, chain_invoice: %OpenNodex.Charge.ChainInvoice{address: "3btcaddress", settled_at: nil}, created_at: 1546732008, currency: "USD", description: "N/A", fiat_value: 99, id: "abbacadabba-d123-456a-baba-99bfdcfb16a1", lightning_invoice: %OpenNodex.Charge.LightningInvoice{created_at: 1546732009, expires_at: 1546735609, payreq: "lnbcsomelonginvoicestring", settled_at: nil}, notes: "", order_id: "N/A", source_fiat_value: 99, status: "unpaid", success_url: "https://site.com/order/abc123"}]
 
   """
-  def get_charges() do
-    get("charges")
+  def get_charges do
+    "charges"
+    |> get()
     |> Parser.parse_atomized_keys()
     |> Enum.map(&Charge.from/1)
   end
@@ -54,7 +56,8 @@ defmodule OpenNodex do
 
   """
   def get_charge(id) do
-    get("charge/#{id}")
+    "charge/#{id}"
+    |> get()
     |> Parser.parse_atomized_keys()
     |> Charge.from()
   end
@@ -68,8 +71,9 @@ defmodule OpenNodex do
       ["USD", "EUR", "RUB", "HKD", "CAD"]
 
   """
-  def get_currencies() do
-    get("currencies")
+  def get_currencies do
+    "currencies"
+    |> get()
     |> Parser.parse_string_keys()
   end
 
@@ -82,8 +86,9 @@ defmodule OpenNodex do
       %{"BTCUSD" => %{"USD" => 3845.30}, "BTCEUR" => %{"EUR" => 2890.95}}
 
   """
-  def get_rates() do
-    get("rates")
+  def get_rates do
+    "rates"
+    |> get()
     |> Parser.parse_string_keys()
   end
 
@@ -101,5 +106,5 @@ defmodule OpenNodex do
     body
   end
 
-  defp request(), do: Application.get_env(:opennodex, :request, OpenNodex.Request)
+  defp request, do: Application.get_env(:opennodex, :request, OpenNodex.Request)
 end

@@ -1,5 +1,9 @@
 defmodule OpenNodex.Charge do
-  alias OpenNodex.Charge.{LightningInvoice, ChainInvoice}
+  @moduledoc """
+  Documentation for OpenNodex.Charge.
+  """
+
+  alias OpenNodex.Charge.{ChainInvoice, LightningInvoice}
 
   defstruct [
     :id,
@@ -31,6 +35,10 @@ defmodule OpenNodex.Charge do
 end
 
 defmodule OpenNodex.Charge.LightningInvoice do
+  @moduledoc """
+  Documentation for OpenNodex.Charge.LightningInvoice.
+  """
+
   defstruct [
     :created_at,
     :expires_at,
@@ -42,6 +50,10 @@ defmodule OpenNodex.Charge.LightningInvoice do
 end
 
 defmodule OpenNodex.Charge.ChainInvoice do
+  @moduledoc """
+  Documentation for OpenNodex.Charge.ChainInvoice.
+  """
+
   defstruct [
     :address,
     :settled_at
