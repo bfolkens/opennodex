@@ -37,3 +37,8 @@ OpenNodex.create_charge(99, "USD", "https://example.com/callback", "https://exam
 ```
 
 Will return an `{:ok, %Charge{id: ...}}` upon success or `{:error, ...}` on failure.
+
+## TODO
+
+* Phoenix integration for the callback events.
+
