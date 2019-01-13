@@ -1,6 +1,7 @@
 defmodule OpenNodex.MockRequest do
   @moduledoc """
-  Documentation for OpenNodex.MockRequest.
+  OpenNodex.MockRequest can be used interchangeably with `OpenNodex.Request` in
+  order to test request behavior.
   """
 
   def get("rates") do

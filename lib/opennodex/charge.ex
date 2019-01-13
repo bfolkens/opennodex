@@ -25,6 +25,9 @@ defmodule OpenNodex.Charge do
     :amount
   ]
 
+  @doc """
+  Convenience method to convert a map to a `%Charge{}`.
+  """
   def from(m = %{}) do
     struct(__MODULE__, %{
       m |
@@ -46,6 +49,9 @@ defmodule OpenNodex.Charge.LightningInvoice do
     :payreq
   ]
 
+  @doc """
+  Convenience method to convert a map to a `%LightningInvoice{}`.
+  """
   def from(m = %{}), do: struct(__MODULE__, m)
 end
 
@@ -59,5 +65,8 @@ defmodule OpenNodex.Charge.ChainInvoice do
     :settled_at
   ]
 
+  @doc """
+  Convenience method to convert a map to a `%ChainInvoice{}`.
+  """
   def from(m = %{}), do: struct(__MODULE__, m)
 end

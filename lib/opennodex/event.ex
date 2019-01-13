@@ -16,6 +16,9 @@ defmodule OpenNodex.Event do
     :hashed_order
   ]
 
+  @doc """
+  Convenience method to convert a map to an `%Event{}`.
+  """
   def from(m = %{}), do: struct(__MODULE__, m)
 
   @doc """
