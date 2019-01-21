@@ -7,10 +7,10 @@ defmodule OpenNodex.Request do
 
   @api_version "v1"
 
-  def get(%Client{base_url: base_url}, endpoint) do
+  def get(%Client{api_key: api_key, base_url: base_url}, endpoint) do
     base_url
     |> url(endpoint)
-    |> HTTPotion.get()
+    |> HTTPotion.get(headers: headers(api_key))
   end
 
   def post(%Client{api_key: api_key, base_url: base_url}, endpoint, body) do
