@@ -1,4 +1,8 @@
 defmodule OpenNodex.Client do
+  @moduledoc """
+  Configuration struct for the OpenNodex client.
+  """
+
   defstruct api_key: nil, base_url: "https://api.opennode.co/v1"
 
   @doc """
