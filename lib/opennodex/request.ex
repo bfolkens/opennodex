@@ -5,7 +5,7 @@ defmodule OpenNodex.Request do
 
   alias OpenNodex.Client
 
-  @api_version "/v1"
+  @api_version "v1"
 
   def get(%Client{base_url: base_url}, endpoint) do
     base_url
@@ -19,7 +19,7 @@ defmodule OpenNodex.Request do
     |> HTTPotion.post(body: body, headers: headers(api_key))
   end
 
-  def url(base_url, endpoint), do: base_url <> @api_version <> "/" <> endpoint
+  def url(base_url, endpoint), do: Enum.join([base_url, @api_version, endpoint], "/")
 
   def headers(api_key) do
     %{
