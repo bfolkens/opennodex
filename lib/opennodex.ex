@@ -3,7 +3,7 @@ defmodule OpenNodex do
   Documentation for OpenNodex.
   """
 
-  alias OpenNodex.{Charge, Parser}
+  alias OpenNodex.{Charge, Client, Parser}
 
   @doc """
   Create a charge.
@@ -12,11 +12,12 @@ defmodule OpenNodex do
 
       iex> callback_url = "https://example.com/callback"
       iex> success_url = "https://example.com/success"
-      iex> OpenNodex.create_charge(99.01, "USD", callback_url, success_url)
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.create_charge(99.01, "USD", callback_url, success_url)
       {:ok, %OpenNodex.Charge{callback_url: nil, name: nil, notif_email: nil, amount: 2573293, auto_settle: false, chain_invoice: %OpenNodex.Charge.ChainInvoice{address: "3btcaddress", settled_at: nil}, created_at: 1546732008, currency: "USD", description: "N/A", fiat_value: 99, id: "abbacadabba-d123-456a-baba-99bfdcfb16a1", lightning_invoice: %OpenNodex.Charge.LightningInvoice{created_at: 1546732009, expires_at: 1546735609, payreq: "lnbcsomelonginvoicestring", settled_at: nil}, notes: "", order_id: "N/A", source_fiat_value: 99, status: "unpaid", success_url: "https://site.com/order/abc123"}}
 
   """
-  def create_charge(amount, base_currency, callback_url, success_url) do
+  def create_charge(%Client{} = client, amount, base_currency, callback_url, success_url) do
     request_body = Jason.encode!(%{
       amount: amount,
       currency: base_currency,
@@ -24,7 +25,7 @@ defmodule OpenNodex do
       success_url: success_url
     })
 
-    case post("charges", request_body) do
+    case post(client, "charges", request_body) do
       {:ok, data} ->
         charge =
           data
@@ -42,12 +43,13 @@ defmodule OpenNodex do
 
   ## Examples
 
-      iex> OpenNodex.get_charges()
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.get_charges()
       {:ok, [%OpenNodex.Charge{callback_url: nil, name: nil, notif_email: nil, amount: 2573293, auto_settle: false, chain_invoice: %OpenNodex.Charge.ChainInvoice{address: "3btcaddress", settled_at: nil}, created_at: 1546732008, currency: "USD", description: "N/A", fiat_value: 99, id: "abbacadabba-d123-456a-baba-99bfdcfb16a1", lightning_invoice: %OpenNodex.Charge.LightningInvoice{created_at: 1546732009, expires_at: 1546735609, payreq: "lnbcsomelonginvoicestring", settled_at: nil}, notes: "", order_id: "N/A", source_fiat_value: 99, status: "unpaid", success_url: "https://site.com/order/abc123"}]}
 
   """
-  def get_charges do
-    case get("charges") do
+  def get_charges(%Client{} = client) do
+    case get(client, "charges") do
       {:ok, data} ->
         charges =
           data
@@ -65,12 +67,13 @@ defmodule OpenNodex do
 
   ## Examples
 
-      iex> OpenNodex.get_charge("abbacadabba-d123-456a-baba-99bfdcfb16a1")
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.get_charge("abbacadabba-d123-456a-baba-99bfdcfb16a1")
       {:ok, %OpenNodex.Charge{callback_url: nil, name: nil, notif_email: nil, amount: 2573293, auto_settle: false, chain_invoice: %OpenNodex.Charge.ChainInvoice{address: "3btcaddress", settled_at: nil}, created_at: 1546732008, currency: "USD", description: "N/A", fiat_value: 99, id: "abbacadabba-d123-456a-baba-99bfdcfb16a1", lightning_invoice: %OpenNodex.Charge.LightningInvoice{created_at: 1546732009, expires_at: 1546735609, payreq: "lnbcsomelonginvoicestring", settled_at: nil}, notes: "", order_id: "N/A", source_fiat_value: 99, status: "unpaid", success_url: "https://site.com/order/abc123"}}
 
   """
-  def get_charge(id) do
-    case get("charge/#{id}") do
+  def get_charge(%Client{} = client, id) do
+    case get(client, "charge/#{id}") do
       {:ok, data} ->
         charge =
           data
@@ -88,12 +91,13 @@ defmodule OpenNodex do
 
   ## Examples
 
-      iex> OpenNodex.get_currencies()
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.get_currencies()
       {:ok, ["USD", "EUR", "RUB", "HKD", "CAD"]}
 
   """
-  def get_currencies do
-    case get("currencies") do
+  def get_currencies(%Client{} = client) do
+    case get(client, "currencies") do
       {:ok, data} ->
         currencies = Parser.parse_string_keys(data)
         {:ok, currencies}
@@ -108,12 +112,13 @@ defmodule OpenNodex do
 
   ## Examples
 
-      iex> OpenNodex.get_rates()
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.get_rates()
       {:ok, %{"BTCUSD" => %{"USD" => 3845.30}, "BTCEUR" => %{"EUR" => 2890.95}}}
 
   """
-  def get_rates do
-    case get("rates") do
+  def get_rates(%Client{} = client) do
+    case get(client, "rates") do
       {:ok, data} ->
         rates = Parser.parse_string_keys(data)
         {:ok, rates}
@@ -127,8 +132,8 @@ defmodule OpenNodex do
   # Private
   #
 
-  defp get(endpoint) do
-    case request().get(endpoint) do
+  defp get(%Client{} = client, endpoint) do
+    case request().get(client, endpoint) do
       %HTTPotion.Response{body: body, status_code: 200} ->
         {:ok, body}
       %HTTPotion.Response{body: body} ->
@@ -136,8 +141,8 @@ defmodule OpenNodex do
     end
   end
 
-  defp post(endpoint, data) do
-    case request().post(endpoint, data) do
+  defp post(%Client{} = client, endpoint, data) do
+    case request().post(client, endpoint, data) do
       %HTTPotion.Response{body: body, status_code: 201} ->
         {:ok, body}
       %HTTPotion.Response{body: body} ->
@@ -145,5 +150,5 @@ defmodule OpenNodex do
     end
   end
 
-  defp request, do: Application.get_env(:opennodex, :request, OpenNodex.Request)
+  defp request(), do: Application.get_env(:opennodex, :request, OpenNodex.Request)
 end

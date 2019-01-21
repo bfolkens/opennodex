@@ -13,27 +13,20 @@ The package can be installed by adding `opennodex` to your list of dependencies 
 ```elixir
 def deps do
   [
-    {:opennodex, "~> 0.2.1"}
+    {:opennodex, "~> 0.3.0"}
   ]
 end
 ```
 
 API Documentation is also available at [https://hexdocs.pm/opennodex](https://hexdocs.pm/opennodex).
 
-## Configuration
-
-In your config.exs, place a line that sets the `api_key` for `:opennodex`:
-
-```elixir
-config :opennodex, api_key: "[your api_key here]"
-```
-
 ## Usage
 
 Create a $99 charge, with callback and success URLs:
 
 ```elixir
-OpenNodex.create_charge(99, "USD", "https://example.com/callback", "https://example.com/success")
+OpenNodex.Client.new("[your api_key here]")
+|> OpenNodex.create_charge(99, "USD", "https://example.com/callback", "https://example.com/success")
 ```
 
 Will return an `{:ok, %Charge{id: ...}}` upon success or `{:error, ...}` on failure.

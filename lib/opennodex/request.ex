@@ -3,25 +3,34 @@ defmodule OpenNodex.Request do
   Documentation for OpenNodex.Request.
   """
 
-  @base_url "https://api.opennode.co/v1"
+  alias OpenNodex.Client
 
-  def get(endpoint), do: HTTPotion.get(@base_url <> "/" <> endpoint)
-  def post(endpoint, body), do: HTTPotion.post(@base_url <> "/" <> endpoint, body: body, headers: headers())
+  @api_version "/v1"
 
-  def headers do
+  def get(%Client{base_url: base_url}, endpoint) do
+    base_url
+    |> url(endpoint)
+    |> HTTPotion.get()
+  end
+
+  def post(%Client{api_key: api_key, base_url: base_url}, endpoint, body) do
+    base_url
+    |> url(endpoint)
+    |> HTTPotion.post(body: body, headers: headers(api_key))
+  end
+
+  def url(base_url, endpoint), do: base_url <> @api_version <> "/" <> endpoint
+
+  def headers(api_key) do
     %{
       "Content-Type": "application/json",
       "User-Agent": user_agent(),
-      Authorization: auth_key()
+      Authorization: api_key
     }
   end
 
   def user_agent do
     "opennodex/#{version()}"
-  end
-
-  def auth_key do
-    Application.get_env(:opennodex, :api_key)
   end
 
   def version do
