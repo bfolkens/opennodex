@@ -150,5 +150,5 @@ defmodule OpenNodex do
     end
   end
 
-  defp request(), do: Application.get_env(:opennodex, :request, OpenNodex.Request)
+  defp request, do: Application.get_env(:opennodex, :request, OpenNodex.Request)
 end
