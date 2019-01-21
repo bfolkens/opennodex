@@ -16,13 +16,13 @@ defmodule OpenNodex.MixProject do
         main: "readme",
         extras: ["README.md"]
       ],
-      files: ~w(mix.exs lib LICENSE README.md),
       package: [
         maintainers: ["Brad Folkens"],
         licenses: ["MIT"],
         links: %{
           "GitHub" => @github_url,
-        }
+        },
+        files: ~w(mix.exs lib LICENSE README.md)
       ],
       source_url: @github_url,
       homepage_url: @github_url,
