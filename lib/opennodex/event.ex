@@ -19,7 +19,7 @@ defmodule OpenNodex.Event do
   @doc """
   Convenience method to convert a map to an `%Event{}`.
   """
-  def from(m = %{}), do: struct(__MODULE__, m)
+  def from(%{} = m), do: struct(__MODULE__, m)
 
   @doc """
   Checks the validity of the order hash for the `charge` and `api_key`.
