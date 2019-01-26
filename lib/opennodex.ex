@@ -138,6 +138,8 @@ defmodule OpenNodex do
         {:ok, body}
       %HTTPotion.Response{body: body} ->
         {:error, body}
+      %HTTPotion.ErrorResponse{message: body} ->
+        {:error, body}
     end
   end
 
@@ -146,6 +148,8 @@ defmodule OpenNodex do
       %HTTPotion.Response{body: body, status_code: 201} ->
         {:ok, body}
       %HTTPotion.Response{body: body} ->
+        {:error, body}
+      %HTTPotion.ErrorResponse{message: body} ->
         {:error, body}
     end
   end
