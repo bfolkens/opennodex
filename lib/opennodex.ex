@@ -32,8 +32,7 @@ defmodule OpenNodex do
           |> Parser.parse_atomized_keys()
           |> Charge.from()
         {:ok, charge}
-      {:error, data} ->
-        message = Parser.parse_error(data)
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -56,8 +55,7 @@ defmodule OpenNodex do
           |> Parser.parse_atomized_keys()
           |> Enum.map(&Charge.from/1)
         {:ok, charges}
-      {:error, data} ->
-        message = Parser.parse_error(data)
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -80,8 +78,7 @@ defmodule OpenNodex do
           |> Parser.parse_atomized_keys()
           |> Charge.from()
         {:ok, charge}
-      {:error, data} ->
-        message = Parser.parse_error(data)
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -101,8 +98,7 @@ defmodule OpenNodex do
       {:ok, data} ->
         currencies = Parser.parse_string_keys(data)
         {:ok, currencies}
-      {:error, data} ->
-        message = Parser.parse_error(data)
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -122,8 +118,7 @@ defmodule OpenNodex do
       {:ok, data} ->
         rates = Parser.parse_string_keys(data)
         {:ok, rates}
-      {:error, data} ->
-        message = Parser.parse_error(data)
+      {:error, message} ->
         {:error, message}
     end
   end
@@ -137,7 +132,7 @@ defmodule OpenNodex do
       %HTTPotion.Response{body: body, status_code: 200} ->
         {:ok, body}
       %HTTPotion.Response{body: body} ->
-        {:error, body}
+        {:error, Parser.parse_error(body)}
       %HTTPotion.ErrorResponse{message: body} ->
         {:error, body}
     end
@@ -148,7 +143,7 @@ defmodule OpenNodex do
       %HTTPotion.Response{body: body, status_code: 201} ->
         {:ok, body}
       %HTTPotion.Response{body: body} ->
-        {:error, body}
+        {:error, Parser.parse_error(body)}
       %HTTPotion.ErrorResponse{message: body} ->
         {:error, body}
     end
