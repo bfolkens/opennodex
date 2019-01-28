@@ -30,6 +30,14 @@ defmodule OpenNodex.MockRequest do
     %HTTPotion.Response{status_code: 200, body: body}
   end
 
+  def get(_, "charge/" <> _) do
+    body = ~s"""
+    {"success":false,"message":"Invoice does not exist."}
+    """
+
+    %HTTPotion.Response{status_code: 404, body: body}
+  end
+
   def get(_, "api-key-error") do
     body = ~s"""
     {"success":false,"message":"Not authorized: missing api-key"}
