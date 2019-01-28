@@ -29,7 +29,7 @@ defmodule OpenNodex.Parser do
 
   """
   def parse_atomized_keys(json) do
-    %{data: data} = Jason.decode!(json, keys: :atoms!)
+    %{data: data} = Jason.decode!(json, keys: :atoms)
     data
   end
 
