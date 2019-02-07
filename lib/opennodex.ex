@@ -29,7 +29,7 @@ defmodule OpenNodex do
 
     params =
       if base_currency != nil do
-        Map.put(params, currency: base_currency)
+        Map.put(params, :currency, base_currency)
       else
         params
       end
