@@ -6,7 +6,7 @@ defmodule OpenNodex do
   alias OpenNodex.{Charge, Client, Parser}
 
   @doc """
-  Create a charge.
+  Create a charge.  If currency is nil or create_charge/4 is called instead, Satoshis will be used.
 
   ## Examples
 
@@ -17,13 +17,24 @@ defmodule OpenNodex do
       {:ok, %OpenNodex.Charge{callback_url: nil, name: nil, notif_email: nil, amount: 2573293, auto_settle: false, chain_invoice: %OpenNodex.Charge.ChainInvoice{address: "3btcaddress", settled_at: nil}, created_at: 1546732008, currency: "USD", description: "N/A", fiat_value: 99, id: "abbacadabba-d123-456a-baba-99bfdcfb16a1", lightning_invoice: %OpenNodex.Charge.LightningInvoice{created_at: 1546732009, expires_at: 1546735609, payreq: "lnbcsomelonginvoicestring", settled_at: nil}, notes: "", order_id: "N/A", source_fiat_value: 99, status: "unpaid", success_url: "https://site.com/order/abc123"}}
 
   """
+  def create_charge(%Client{} = client, amount, callback_url, success_url), do:
+    create_charge(client, amount, nil, callback_url, success_url)
+
   def create_charge(%Client{} = client, amount, base_currency, callback_url, success_url) do
-    request_body = Jason.encode!(%{
+    params = %{
       amount: amount,
-      currency: base_currency,
       callback_url: callback_url,
       success_url: success_url
-    })
+    }
+
+    params =
+      if base_currency != nil do
+        Map.put(params, currency: base_currency)
+      else
+        params
+      end
+
+    request_body = Jason.encode!(params)
 
     case post(client, "charges", request_body) do
       {:ok, data} ->
