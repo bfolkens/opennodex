@@ -13,7 +13,7 @@ The package can be installed by adding `opennodex` to your list of dependencies 
 ```elixir
 def deps do
   [
-    {:opennodex, "~> 0.3.0"}
+    {:opennodex, "~> 0.4.0"}
   ]
 end
 ```
