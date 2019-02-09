@@ -24,14 +24,14 @@ defmodule OpenNodex.Event do
   @doc """
   Checks the validity of the order hash for the `event` and `api_key`.
 
-    ## Examples
+  ## Examples
 
-        iex> event = %OpenNodex.Event{
-        ...>   id: "abbacadabba-d123-456a-baba-99bfdcfb16a1",
-        ...>   hashed_order: "df873d17dd8b6335db232ed1c242d4df91b0dbe3b3f2baba67e7d38c43b8370c"
-        ...> }
-        iex> OpenNodex.Event.check_validity(event, "abbacadabba")
-        true
+      iex> event = %OpenNodex.Event{
+      ...>   id: "abbacadabba-d123-456a-baba-99bfdcfb16a1",
+      ...>   hashed_order: "df873d17dd8b6335db232ed1c242d4df91b0dbe3b3f2baba67e7d38c43b8370c"
+      ...> }
+      iex> OpenNodex.Event.check_validity(event, "abbacadabba")
+      true
 
   """
   def check_validity(event, api_key) do
