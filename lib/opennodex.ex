@@ -86,6 +86,30 @@ defmodule OpenNodex do
   end
 
   @doc """
+  Decode a BOLT11 compliant payment request.
+
+  ## Examples
+
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.decode_charge("lnbc10n1p0pgxq3pp59t5yhacrkkqz9sy6p54d9lzgj7cydvj4k5ve3prd034ewphmqx2qdq8w3jhxaqcqzpg2fg0jy2svf3dxlqjwfugr8enrsqv9j4n78cch25w0sdjrw4a8ngqwyemr698kdqfk8d4uqvkt6p5436a4m83qvykaxzu7xpsrhq5u6sqm4l7p7")
+      {:ok, %{"pay_req" => %{"network" => "bitcoin", "amount" => 1, "pub_key" => "03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e", "hash" => "2ae84bf703b58022c09a0d2ad2fc4897b046b255b51998846d7c6b9706fb0194"}}}
+
+  """
+  def decode_charge(%Client{} = client, bolt_request) do
+    case post(client, "charge/decode", %{"pay_req" => bolt_request}) do
+      {:ok, data} ->
+        pay_req =
+          data
+          |> Parser.parse_string_keys()
+
+        {:ok, pay_req}
+
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  @doc """
   Retrieve the available currencies.
 
   ## Examples

@@ -61,4 +61,12 @@ defmodule OpenNodex.MockRequest do
 
     %HTTPotion.Response{status_code: 201, body: body}
   end
+
+  def post(_, "charge/decode", _) do
+    body = ~s"""
+    {"data":{"pay_req":{"network":"bitcoin","amount":1,"pub_key":"03abf6f44c355dec0d5aa155bdbdd6e0c8fefe318eff402de65c6eb2e1be55dc3e","hash":"2ae84bf703b58022c09a0d2ad2fc4897b046b255b51998846d7c6b9706fb0194"}}}
+    """
+
+    %HTTPotion.Response{status_code: 201, body: body}
+  end
 end
