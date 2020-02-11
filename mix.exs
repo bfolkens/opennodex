@@ -8,7 +8,7 @@ defmodule OpenNodex.MixProject do
       app: :opennodex,
       name: "OpenNodex",
       description: "Opennode.co Elixir Client",
-      version: "0.5.1",
+      version: "0.6.0",
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
@@ -20,7 +20,7 @@ defmodule OpenNodex.MixProject do
         maintainers: ["Brad Folkens"],
         licenses: ["MIT"],
         links: %{
-          "GitHub" => @github_url,
+          "GitHub" => @github_url
         },
         files: ~w(mix.exs lib LICENSE README.md)
       ],
@@ -49,7 +49,8 @@ defmodule OpenNodex.MixProject do
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:credo, "~> 1.0", only: [:dev, :test]},
       {:excoveralls, "~> 0.10", only: :test},
-      {:junit_formatter, "~> 2.1", only: :test} # formatting for CircleCI
+      # formatting for CircleCI
+      {:junit_formatter, "~> 2.1", only: :test}
     ]
   end
 end
