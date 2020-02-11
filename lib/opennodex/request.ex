@@ -5,21 +5,19 @@ defmodule OpenNodex.Request do
 
   alias OpenNodex.Client
 
-  @api_version "v1"
-
-  def get(%Client{api_key: api_key, base_url: base_url}, endpoint) do
-    base_url
-    |> url(endpoint)
-    |> HTTPotion.get(headers: headers(api_key))
+  def get(%Client{} = client, api_version, endpoint) do
+    client.base_url
+    |> url(api_version, endpoint)
+    |> HTTPotion.get(headers: headers(client.api_key))
   end
 
-  def post(%Client{api_key: api_key, base_url: base_url}, endpoint, body) do
-    base_url
-    |> url(endpoint)
-    |> HTTPotion.post(body: body, headers: headers(api_key))
+  def post(%Client{} = client, api_version, endpoint, body) do
+    client.base_url
+    |> url(api_version, endpoint)
+    |> HTTPotion.post(body: body, headers: headers(client.api_key))
   end
 
-  def url(base_url, endpoint), do: Enum.join([base_url, @api_version, endpoint], "/")
+  def url(base_url, api_version, endpoint), do: Enum.join([base_url, api_version, endpoint], "/")
 
   def headers(api_key) do
     %{
@@ -30,10 +28,6 @@ defmodule OpenNodex.Request do
   end
 
   def user_agent do
-    "opennodex/#{version()}"
-  end
-
-  def version do
-    Application.spec(:opennodex, :vsn)
+    "opennodex/#{OpenNodex.version()}"
   end
 end

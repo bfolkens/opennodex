@@ -148,6 +148,14 @@ defmodule OpenNodex do
     end
   end
 
+  @doc """
+  Retrieve the OpenNodex version.
+  """
+
+  def version do
+    Application.spec(:opennodex, :vsn)
+  end
+
   #
   # Private
   #
