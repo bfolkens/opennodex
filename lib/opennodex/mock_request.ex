@@ -22,6 +22,14 @@ defmodule OpenNodex.MockRequest do
     %HTTPotion.Response{status_code: 200, body: body}
   end
 
+  def get(_, "account/balance") do
+    body = ~s"""
+    {"data":{"balance":{"BTC":259928620,"USD":18545.86}}}
+    """
+
+    %HTTPotion.Response{status_code: 200, body: body}
+  end
+
   def get(_, "charge/abbacadabba-d123-456a-baba-99bfdcfb16a1") do
     body = ~s"""
     {"data":{"id":"abbacadabba-d123-456a-baba-99bfdcfb16a1","description":"N/A","amount":2573293,"status":"unpaid","fiat_value":99,"source_fiat_value":99,"currency":"USD","created_at":1546732008,"order_id":"N/A","success_url":"https://site.com/order/abc123","notes":"","auto_settle":false,"lightning_invoice":{"created_at":1546732009,"expires_at":1546735609,"payreq":"lnbcsomelonginvoicestring","settled_at":null},"chain_invoice":{"address":"3btcaddress","settled_at":null}}}

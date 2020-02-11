@@ -27,7 +27,9 @@ defmodule OpenNodex do
           data
           |> Parser.parse_atomized_keys()
           |> Charge.from()
+
         {:ok, charge}
+
       {:error, message} ->
         {:error, message}
     end
@@ -50,7 +52,9 @@ defmodule OpenNodex do
           data
           |> Parser.parse_atomized_keys()
           |> Enum.map(&Charge.from/1)
+
         {:ok, charges}
+
       {:error, message} ->
         {:error, message}
     end
@@ -73,7 +77,9 @@ defmodule OpenNodex do
           data
           |> Parser.parse_atomized_keys()
           |> Charge.from()
+
         {:ok, charge}
+
       {:error, message} ->
         {:error, message}
     end
@@ -94,6 +100,7 @@ defmodule OpenNodex do
       {:ok, data} ->
         currencies = Parser.parse_string_keys(data)
         {:ok, currencies}
+
       {:error, message} ->
         {:error, message}
     end
@@ -114,6 +121,28 @@ defmodule OpenNodex do
       {:ok, data} ->
         rates = Parser.parse_string_keys(data)
         {:ok, rates}
+
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  @doc """
+  Retrieve the account balance.
+
+  ## Examples
+
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.get_account_balance()
+      {:ok, %{"balance" => %{"BTC" => 259928620, "USD" => 18545.86 }}}
+
+  """
+  def get_account_balance(%Client{} = client) do
+    case get(client, "account/balance") do
+      {:ok, data} ->
+        account_balance = Parser.parse_string_keys(data)
+        {:ok, account_balance}
+
       {:error, message} ->
         {:error, message}
     end
@@ -127,8 +156,10 @@ defmodule OpenNodex do
     case request().get(client, endpoint) do
       %HTTPotion.Response{body: body, status_code: 200} ->
         {:ok, body}
+
       %HTTPotion.Response{body: body} ->
         {:error, Parser.parse_error(body)}
+
       %HTTPotion.ErrorResponse{message: body} ->
         {:error, body}
     end
@@ -138,8 +169,10 @@ defmodule OpenNodex do
     case request().post(client, endpoint, data) do
       %HTTPotion.Response{body: body, status_code: 201} ->
         {:ok, body}
+
       %HTTPotion.Response{body: body} ->
         {:error, Parser.parse_error(body)}
+
       %HTTPotion.ErrorResponse{message: body} ->
         {:error, body}
     end
