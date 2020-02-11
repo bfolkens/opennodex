@@ -10,7 +10,9 @@ defmodule OpenNodex.Withdrawal do
     :reference,
     :fee,
     :status,
-    :processed_at
+    :processed_at,
+    :address,
+    :fiat_value
   ]
 
   @doc """

@@ -179,7 +179,7 @@ defmodule OpenNodex do
 
       iex> OpenNodex.Client.new("api_key")
       ...> |> OpenNodex.initiate_withdrawal("ln", %{"amount" => 5000, "address" => "", "callback_url" => ""})
-      {:ok, %OpenNodex.Withdrawal{id: "3f50999e-f21f-4981-b67c-ea9c075be7d6", amount: 10, fee: 0, processed_at: 1559559748, status: "pending", type: "ln", reference: "lntb100n1pw0fl34pp5p8u6alsp6vr7ngevp82lu6kz7j4ryla0dgpg9es0jq70shs39xzsdqqcqzpgxqyz5vqm5egyvdadnnvrecqdzamwl6guhhvkpja0s9e0vu6g0ay75kegzfnhjykdveagfj8rt9nay0yvu8j94shsvj3ghxu306y2pac02nq85qq7m8tsc"}}
+      {:ok, %OpenNodex.Withdrawal{id: "3f50999e-f21f-4981-b67c-ea9c075be7d6", amount: 10, fee: 0, processed_at: 1559559748, status: "pending", type: "ln", reference: "lntb100n1pw0fl34pp5p8u6alsp6vr7ngevp82lu6kz7j4ryla0dgpg9es0jq70shs39xzsdqqcqzpgxqyz5vqm5egyvdadnnvrecqdzamwl6guhhvkpja0s9e0vu6g0ay75kegzfnhjykdveagfj8rt9nay0yvu8j94shsvj3ghxu306y2pac02nq85qq7m8tsc", address: nil, fiat_value: nil}}
 
   """
 
@@ -190,6 +190,57 @@ defmodule OpenNodex do
       |> Jason.encode!()
 
     case post(client, "v2", "withdrawals", request_body) do
+      {:ok, data} ->
+        withdrawal =
+          data
+          |> Parser.parse_atomized_keys()
+          |> Withdrawal.from()
+
+        {:ok, withdrawal}
+
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  @doc """
+  List the withdrawals.
+
+  ## Examples
+
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.get_withdrawals()
+      {:ok, [%OpenNodex.Withdrawal{fiat_value: nil, address: "03c856d2dbec7454c48f311031f06bb99e3ca1ab15a9b9b35de14e139aa663b463", amount: 10, fee: 0, id: "3f50999e-f21f-4981-b67c-ea9c075be7d6", processed_at: 1559559748, reference: "lntb100n1pw0fl34pp5p8u6alsp6vr7ngevp82lu6kz7j4ryla0dgpg9es0jq70shs39xzsdqqcqzpgxqyz5vqm5egyvdadnnvrecqdzamwl6guhhvkpja0s9e0vu6g0ay75kegzfnhjykdveagfj8rt9nay0yvu8j94shsvj3ghxu306y2pac02nq85qq7m8tsc", status: "confirmed", type: "ln"}, %OpenNodex.Withdrawal{address: "03c856d2dbec7454c48f311031f06bb99e3ca1ab15a9b9b35de14e139aa663b463", amount: 1, fee: 0, fiat_value: nil, id: "4652231a-2c0a-4134-9bb6-a7f3fb1b06a4", processed_at: 1558963969, reference: "lntb10n1pwwhehmpp5ypyq6t5gp4466xchks9s95hwwpm88hkfxez9qnpt4wc5qkpknj0sdqqcqzpgxqyz5vqptw4ljzupae9yad60crk84l9av76dt7s4rkxk3g22kwlax2uv5ryc4swf6dqfyrn5lhhu5r8f80cvlca4lxf3hrzwy4634kfc3z47nqpn6cuuq", status: "confirmed", type: "ln"}]}
+
+  """
+
+  def get_withdrawals(%Client{} = client) do
+    case get(client, "v1", "withdrawals") do
+      {:ok, data} ->
+        withdrawals =
+          data
+          |> Parser.parse_atomized_keys()
+          |> Enum.map(&Withdrawal.from/1)
+
+        {:ok, withdrawals}
+
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  @doc """
+  Get a withdrawal.
+
+  ## Examples
+
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.get_withdrawal("3f50999e-f21f-4981-b67c-ea9c075be7d6")
+      {:ok, %OpenNodex.Withdrawal{fiat_value: nil, processed_at: nil, address: "03c856d2dbec7454c48f311031f06bb99e3ca1ab15a9b9b35de14e139aa663b463", amount: 10, fee: 0, id: "3f50999e-f21f-4981-b67c-ea9c075be7d6", reference: "lntb100n1pw0fl34pp5p8u6alsp6vr7ngevp82lu6kz7j4ryla0dgpg9es0jq70shs39xzsdqqcqzpgxqyz5vqm5egyvdadnnvrecqdzamwl6guhhvkpja0s9e0vu6g0ay75kegzfnhjykdveagfj8rt9nay0yvu8j94shsvj3ghxu306y2pac02nq85qq7m8tsc", status: "confirmed", type: "ln"}}
+  """
+
+  def get_withdrawal(%Client{} = client, id) do
+    case get(client, "v1", "withdrawal/#{id}") do
       {:ok, data} ->
         withdrawal =
           data

@@ -46,6 +46,30 @@ defmodule OpenNodex.MockRequest do
     %HTTPotion.Response{status_code: 404, body: body}
   end
 
+  def get(_, "v1", "withdrawals") do
+    body = ~s"""
+    {"data":[{"id":"3f50999e-f21f-4981-b67c-ea9c075be7d6","amount":10,"type":"ln","reference":"lntb100n1pw0fl34pp5p8u6alsp6vr7ngevp82lu6kz7j4ryla0dgpg9es0jq70shs39xzsdqqcqzpgxqyz5vqm5egyvdadnnvrecqdzamwl6guhhvkpja0s9e0vu6g0ay75kegzfnhjykdveagfj8rt9nay0yvu8j94shsvj3ghxu306y2pac02nq85qq7m8tsc","processed_at":1559559748,"status":"confirmed","address":"03c856d2dbec7454c48f311031f06bb99e3ca1ab15a9b9b35de14e139aa663b463","fee":0,"fiat_value":null},{"id":"4652231a-2c0a-4134-9bb6-a7f3fb1b06a4","amount":1,"type":"ln","reference":"lntb10n1pwwhehmpp5ypyq6t5gp4466xchks9s95hwwpm88hkfxez9qnpt4wc5qkpknj0sdqqcqzpgxqyz5vqptw4ljzupae9yad60crk84l9av76dt7s4rkxk3g22kwlax2uv5ryc4swf6dqfyrn5lhhu5r8f80cvlca4lxf3hrzwy4634kfc3z47nqpn6cuuq","processed_at":1558963969,"status":"confirmed","address":"03c856d2dbec7454c48f311031f06bb99e3ca1ab15a9b9b35de14e139aa663b463","fee":0,"fiat_value":null}]}
+    """
+
+    %HTTPotion.Response{status_code: 200, body: body}
+  end
+
+  def get(_, "v1", "withdrawal/3f50999e-f21f-4981-b67c-ea9c075be7d6") do
+    body = ~s"""
+    {"data":{"id":"3f50999e-f21f-4981-b67c-ea9c075be7d6","amount":10,"type":"ln","reference":"lntb100n1pw0fl34pp5p8u6alsp6vr7ngevp82lu6kz7j4ryla0dgpg9es0jq70shs39xzsdqqcqzpgxqyz5vqm5egyvdadnnvrecqdzamwl6guhhvkpja0s9e0vu6g0ay75kegzfnhjykdveagfj8rt9nay0yvu8j94shsvj3ghxu306y2pac02nq85qq7m8tsc","status":"confirmed","address":"03c856d2dbec7454c48f311031f06bb99e3ca1ab15a9b9b35de14e139aa663b463","fee":0,"fiat_value":null}}
+    """
+
+    %HTTPotion.Response{status_code: 200, body: body}
+  end
+
+  def get(_, "v1", "withdrawal/" <> _) do
+    body = ~s"""
+    {"success":false,"message":"Withdrawal does not exist."}
+    """
+
+    %HTTPotion.Response{status_code: 404, body: body}
+  end
+
   def get(_, "v1", "api-key-error") do
     body = ~s"""
     {"success":false,"message":"Not authorized: missing api-key"}
