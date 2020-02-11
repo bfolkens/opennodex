@@ -3,7 +3,7 @@ defmodule OpenNodex do
   Documentation for OpenNodex.
   """
 
-  alias OpenNodex.{Charge, Client, Parser}
+  alias OpenNodex.{Charge, Client, Parser, Withdrawal}
 
   @doc """
   Create a charge.  If currency is omitted, Satoshis will be used.
@@ -21,7 +21,7 @@ defmodule OpenNodex do
       |> Map.put(:amount, amount)
       |> Jason.encode!()
 
-    case post(client, "charges", request_body) do
+    case post(client, "v1", "charges", request_body) do
       {:ok, data} ->
         charge =
           data
@@ -46,7 +46,7 @@ defmodule OpenNodex do
 
   """
   def get_charges(%Client{} = client) do
-    case get(client, "charges") do
+    case get(client, "v1", "charges") do
       {:ok, data} ->
         charges =
           data
@@ -71,7 +71,7 @@ defmodule OpenNodex do
 
   """
   def get_charge(%Client{} = client, id) do
-    case get(client, "charge/#{id}") do
+    case get(client, "v1", "charge/#{id}") do
       {:ok, data} ->
         charge =
           data
@@ -96,7 +96,7 @@ defmodule OpenNodex do
 
   """
   def decode_charge(%Client{} = client, bolt_request) do
-    case post(client, "charge/decode", %{"pay_req" => bolt_request}) do
+    case post(client, "v1", "charge/decode", %{"pay_req" => bolt_request}) do
       {:ok, data} ->
         pay_req =
           data
@@ -120,7 +120,7 @@ defmodule OpenNodex do
 
   """
   def get_currencies(%Client{} = client) do
-    case get(client, "currencies") do
+    case get(client, "v1", "currencies") do
       {:ok, data} ->
         currencies = Parser.parse_string_keys(data)
         {:ok, currencies}
@@ -141,7 +141,7 @@ defmodule OpenNodex do
 
   """
   def get_rates(%Client{} = client) do
-    case get(client, "rates") do
+    case get(client, "v1", "rates") do
       {:ok, data} ->
         rates = Parser.parse_string_keys(data)
         {:ok, rates}
@@ -162,10 +162,41 @@ defmodule OpenNodex do
 
   """
   def get_account_balance(%Client{} = client) do
-    case get(client, "account/balance") do
+    case get(client, "v1", "account/balance") do
       {:ok, data} ->
         account_balance = Parser.parse_string_keys(data)
         {:ok, account_balance}
+
+      {:error, message} ->
+        {:error, message}
+    end
+  end
+
+  @doc """
+  Initiate a withdrawal.
+
+  ## Examples
+
+      iex> OpenNodex.Client.new("api_key")
+      ...> |> OpenNodex.initiate_withdrawal("ln", %{"amount" => 5000, "address" => "", "callback_url" => ""})
+      {:ok, %OpenNodex.Withdrawal{id: "3f50999e-f21f-4981-b67c-ea9c075be7d6", amount: 10, fee: 0, processed_at: 1559559748, status: "pending", type: "ln", reference: "lntb100n1pw0fl34pp5p8u6alsp6vr7ngevp82lu6kz7j4ryla0dgpg9es0jq70shs39xzsdqqcqzpgxqyz5vqm5egyvdadnnvrecqdzamwl6guhhvkpja0s9e0vu6g0ay75kegzfnhjykdveagfj8rt9nay0yvu8j94shsvj3ghxu306y2pac02nq85qq7m8tsc"}}
+
+  """
+
+  def initiate_withdrawal(%Client{} = client, type, attrs \\ %{}) do
+    request_body =
+      attrs
+      |> Map.put(:type, type)
+      |> Jason.encode!()
+
+    case post(client, "v2", "withdrawals", request_body) do
+      {:ok, data} ->
+        withdrawal =
+          data
+          |> Parser.parse_atomized_keys()
+          |> Withdrawal.from()
+
+        {:ok, withdrawal}
 
       {:error, message} ->
         {:error, message}
@@ -184,8 +215,8 @@ defmodule OpenNodex do
   # Private
   #
 
-  defp get(%Client{} = client, endpoint) do
-    case request().get(client, endpoint) do
+  defp get(%Client{} = client, api_version, endpoint) do
+    case request().get(client, api_version, endpoint) do
       %HTTPotion.Response{body: body, status_code: 200} ->
         {:ok, body}
 
@@ -197,8 +228,8 @@ defmodule OpenNodex do
     end
   end
 
-  defp post(%Client{} = client, endpoint, data) do
-    case request().post(client, endpoint, data) do
+  defp post(%Client{} = client, api_version, endpoint, data) do
+    case request().post(client, api_version, endpoint, data) do
       %HTTPotion.Response{body: body, status_code: 201} ->
         {:ok, body}
 
